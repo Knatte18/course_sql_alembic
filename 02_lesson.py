@@ -1,4 +1,8 @@
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import BIGINT, VARCHAR, ForeignKey, func
+from sqlalchemy.dialects.postgresql import TIMESTAMP
+
+from datetime import datetime
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -6,6 +10,7 @@ class Base(DeclarativeBase):
 
 
 """
+TEMPLATE OF THE users SQL TABLE FORMAT
 CREATE TABLE IF NOT EXISTS users (
     telegram_id    BIGINT       PRIMARY KEY,
     full_name      VARCHAR(255) NOT NULL,
@@ -17,3 +22,17 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 """
+
+
+class User(Base):
+    __tablename__ = 'users'
+    telegram_id: Mapped[int] = mapped_column(BIGINT, primary_key=True)
+    full_name: Mapped[str] = mapped_column(VARCHAR(255))
+    username: Mapped[str] = mapped_column(VARCHAR(255), nullable=True)
+    language_code: Mapped[str] = mapped_column(VARCHAR(255), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        TIMESTAMP, nullable=False, server_default=func.now()
+    )
+    referred_id: Mapped[int] = mapped_column(
+        BIGINT, ForeignKey('users.telegram_id', ondelete='SET NULL'), nullable=True
+    )
