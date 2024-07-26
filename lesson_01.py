@@ -3,16 +3,17 @@ from sqlalchemy.orm import sessionmaker
 
 # Format: driver+postgresql://user:pass@host:port/dbname
 url = URL.create(
-    drivername="postgresql+psycopg2",
-    username="testuser",
-    password="testpassword",
-    host="localhost",
+    drivername='postgresql+psycopg2',
+    username='testuser',
+    password='testpassword',
+    host='localhost',
     port=5432,
-    database="testuser",
+    database='testuser',
 )
 
 engine = create_engine(url, echo=True)
 session_pool = sessionmaker(engine)
+
 
 # with session_pool() as session:
 #     session.execute(
@@ -48,7 +49,7 @@ SELECT * FROM users;
 
     # List the names of the fields returned
     field_names = result.keys()
-    print("Field names:", field_names)
+    print('Field names:', field_names)
 
     rows = result.first()
     print(rows)
